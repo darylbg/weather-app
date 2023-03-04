@@ -1,0 +1,20 @@
+* {
+    /*outline: 1px solid greenyellow;*/
+}
+
+.main {
+    padding-top: 40px;
+}
+
+.city-search {
+    padding: 0px 20px 0px 20px;
+}
+
+.recent-searches {
+    padding: 20px;
+}
+
+.today-weather-display,
+.future-weather-display {
+    padding: 0px 20px 0px 20px;;
+}
