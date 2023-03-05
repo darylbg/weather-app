@@ -18,3 +18,9 @@
 .future-weather-display {
     padding: 0px 20px 0px 20px;;
 }
+
+#current-weather {
+    background-repeat: no-repeat;
+    background-position: right top;
+    background-size: 10%;
+}
