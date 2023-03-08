@@ -22,7 +22,7 @@ var searches = JSON.parse(localStorage.getItem('searches')) || [];
 button.click(function() {
     searches.push(value.val());
     localStorage.setItem('searches', JSON.stringify(searches));
-    
+
     fetch('https://api.openweathermap.org/data/2.5/forecast?q=' + value[0].value + '&appid=c42bd53b497736aab98f794d9e907730')
     .then(function (response) {
         if (response.ok) {
@@ -60,13 +60,13 @@ function setFutureWeather(date) {
                 console.log(data.list.length);
 
                 for (let i = 7; i < data.list.length; i += 8) {
-                    const div = $('<div>').addClass('card col');
-                    const cardBody = $('<div>').addClass('card-body');
-                    const h6 = $('<h6>').addClass('card-title').text(data.list[i].dt_txt);
+                    var div = $('<div>').addClass('card col');
+                    var cardBody = $('<div>').addClass('card-body');
+                    var h6 = $('<h6>').addClass('card-title').text(data.list[i].dt_txt);
                     var image = $('<img>').attr('src', 'https://openweathermap.org/img/w/' + data.list[i].weather[0].icon + '.png');
-                    const p1 = $('<p>').addClass('card-text').text((data.list[i].main.temp - 273.15).toFixed(2) + '°C');
-                    const p3 = $('<p>').addClass('card-text').text(data.list[i].weather[0].description);
-                    const p2 = $('<p>').addClass('card-text').text((data.list[i].wind.speed * 2.2).toFixed(2) + 'mph');
+                    var p1 = $('<p>').addClass('card-text').text((data.list[i].main.temp - 273.15).toFixed(2) + '°C');
+                    var p3 = $('<p>').addClass('card-text').text(data.list[i].weather[0].description);
+                    var p2 = $('<p>').addClass('card-text').text((data.list[i].wind.speed * 2.2).toFixed(2) + 'mph');
                     
                     cardBody.append(h6, image, p1, p2, p3);
                     div.append(cardBody);
@@ -82,3 +82,12 @@ function setFutureWeather(date) {
         alert('Unable to connect to GitHub');
     });
 }
+
+function searchHistory() {
+    console.log(searches.length);
+    for (let i = 0; i < searches.length; i++) {
+        console.log(searches[i]);
+        var button = $('<button>').addClass('btn btn-secondary').text(searches[i]);
+        $('.recent-searches').append(button);
+    }
+} searchHistory();
