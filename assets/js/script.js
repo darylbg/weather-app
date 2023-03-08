@@ -20,9 +20,9 @@ $('#day5-date').text(day5Date.format("MM-DD-YYYY"));
 var searches = JSON.parse(localStorage.getItem('searches')) || [];
 
 button.click(function() {
-    searches.push(value.val());
+    searches.unshift(value.val());
     localStorage.setItem('searches', JSON.stringify(searches));
-
+    $('.future-weather-display').text('');
     fetch('https://api.openweathermap.org/data/2.5/forecast?q=' + value[0].value + '&appid=c42bd53b497736aab98f794d9e907730')
     .then(function (response) {
         if (response.ok) {
@@ -33,6 +33,7 @@ button.click(function() {
                 console.log(data.list[0].weather[0].icon);
 
                 setFutureWeather();
+                
             });
         } else {
             alert('error');
@@ -85,9 +86,14 @@ function setFutureWeather(date) {
 
 function searchHistory() {
     console.log(searches.length);
-    for (let i = 0; i < searches.length; i++) {
+    for (let i = 0; i < 6 && i < searches.length; i++) {
         console.log(searches[i]);
-        var button = $('<button>').addClass('btn btn-secondary').text(searches[i]);
+        var button = $('<button>').addClass('btn btn-secondary search-history-btn').text(searches[i]);
         $('.recent-searches').append(button);
     }
 } searchHistory();
+
+$('.search-history-btn').click(function() {
+    var value = $(this).text();
+    console.log(value);
+});
