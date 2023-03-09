@@ -1,3 +1,4 @@
+/*--setting body styles and background--*/
 body {
     overflow-x: hidden;
     background-image: url(../images/background.jpg);
@@ -18,6 +19,7 @@ body {
     font-weight: bolder;
 }
 
+/*--resetting bootstrap styling--*/
 #example-search-input {
     border: 2px solid #172E45 !important;
     border-right: 1px solid rgba(255,255,255, 0.1) !important;
@@ -33,6 +35,7 @@ body {
     background-color: rgba(255,255,255, 0.7) !important;
 }
 
+/*--setting icon color--*/
 .fa-search {
     color: black;
 }
@@ -69,6 +72,7 @@ body {
     padding: 0px 30px 0px 10px !important;
 }
 
+/*--responsive design for smaller screens--*/
 @media screen and (max-width: 768px) {
     .today-weather-display {
         padding: 0px 30px 0px 30px !important;
@@ -102,19 +106,21 @@ body {
     padding-left: 10px;
 }
 
+/*--styling a custom scrollbar--*/
 .future-weather-display::-webkit-scrollbar {
-    width: 7px;               /* width of the entire scrollbar */
+    width: 7px;               
 }
   
 .future-weather-display::-webkit-scrollbar-track {
-    background: transparent;        /* color of the tracking area */
+    background: transparent;        
 }
   
 .future-weather-display::-webkit-scrollbar-thumb {
-    background-color: #172E45;    /* color of the scroll thumb */
-    border-radius: 20px;       /* roundness of the scroll thumb */
+    background-color: #172E45;    
+    border-radius: 20px;       
 }
 
+/*--adjusting the default bootstrap styling for cards--*/
 .future-weather-display .card {
     min-width: 120px;
     margin: 20px 10px 20px 10px;
