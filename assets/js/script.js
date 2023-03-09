@@ -42,7 +42,7 @@ button.click(function() {
                 searchHistory();       
             });
         } else {
-            alert('Please enter a valid city name');
+            alert('Please enter a valid country or city name');
         }
     })
     .catch(function (error) {
@@ -83,7 +83,7 @@ function searchHistory() {
 
                     });
                 } else {
-                    alert('Please enter a valid city name');
+                    alert('Please enter a valid country or city name');
                 }
             })
             .catch(function (error) {
@@ -126,7 +126,7 @@ function setFutureWeather(searchValue) {
 
             });
         } else {
-            alert('Please enter a valid city name');
+            alert('Please enter a valid country or city name');
         }
     })
     .catch(function (error) {

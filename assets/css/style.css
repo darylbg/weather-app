@@ -33,6 +33,10 @@ body {
     background-color: rgba(255,255,255, 0.7) !important;
 }
 
+.fa-search {
+    color: black;
+}
+
 .city-search {
     padding: 0px 20px 0px 20px;
 }
@@ -96,6 +100,19 @@ body {
     overflow-x: auto;
     flex-wrap: nowrap !important;
     padding-left: 10px;
+}
+
+.future-weather-display::-webkit-scrollbar {
+    width: 7px;               /* width of the entire scrollbar */
+}
+  
+.future-weather-display::-webkit-scrollbar-track {
+    background: transparent;        /* color of the tracking area */
+}
+  
+.future-weather-display::-webkit-scrollbar-thumb {
+    background-color: #172E45;    /* color of the scroll thumb */
+    border-radius: 20px;       /* roundness of the scroll thumb */
 }
 
 .future-weather-display .card {
