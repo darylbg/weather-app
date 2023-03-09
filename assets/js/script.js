@@ -1,5 +1,5 @@
 var button = $('#search-btn');
-var value = $('#example-search-input');
+var searchInput = $('#example-search-input');
 
 var now = dayjs();
 $('#current-day-date').text(now.format("MM-DD-YYYY"));
@@ -20,10 +20,13 @@ $('#day5-date').text(day5Date.format("MM-DD-YYYY"));
 var searches = JSON.parse(localStorage.getItem('searches')) || [];
 
 button.click(function() {
-    searches.unshift(value.val());
+    var searchValue = searchInput.val();
+    searches.unshift(searchValue);
+
     localStorage.setItem('searches', JSON.stringify(searches));
     $('.future-weather-display').text('');
-    fetch('https://api.openweathermap.org/data/2.5/forecast?q=' + value[0].value + '&appid=c42bd53b497736aab98f794d9e907730')
+    console.log('searchValue:', searchValue);
+    fetch('https://api.openweathermap.org/data/2.5/forecast?q=' + searchValue + '&appid=c42bd53b497736aab98f794d9e907730')
     .then(function (response) {
         if (response.ok) {
             response.json().then(function (data) {
@@ -52,8 +55,43 @@ function setCurrentWeather(descriptionIcon, cityName, temperature, weather, wind
     $('#current-weather').find('p').eq(2).text('Wind Speed: ' + (windSpeed * 2.2).toFixed(2) + 'mph');
 }
 
-function setFutureWeather(date) {
-    fetch('https://api.openweathermap.org/data/2.5/forecast?q=' + value[0].value + '&appid=c42bd53b497736aab98f794d9e907730')
+function searchHistory() {
+    console.log(searches.length);
+    for (let i = 0; i < 6 && i < searches.length; i++) {
+        console.log(searches[i]);
+        var button = $('<button>').addClass('btn btn-secondary search-history-btn').text(searches[i]);
+        $('.recent-searches').append(button);
+    }
+} searchHistory();
+
+$('.search-history-btn').click(function() {
+    var searchHistoryValue = $(this).text();
+    // searches.unshift(value.val());
+    // localStorage.setItem('searches', JSON.stringify(searches));
+    $('.future-weather-display').text('');
+    fetch('https://api.openweathermap.org/data/2.5/forecast?q=' + searchHistoryValue + '&appid=c42bd53b497736aab98f794d9e907730')
+    .then(function (response) {
+        if (response.ok) {
+            response.json().then(function (data) {
+                console.log(data);
+                console.log(data.city.name);
+                setCurrentWeather(data.list[0].weather[0].icon, data.city.name, data.list[0].main.temp, data.list[0].weather[0].description, data.list[0].wind.speed);
+                console.log(data.list[0].weather[0].icon);
+
+                setFutureWeather(searchHistoryValue);
+                
+            });
+        } else {
+            alert('error');
+        }
+    })
+    .catch(function (error) {
+        alert('Unable to connect to GitHub');
+    });
+});
+
+function setFutureWeather(searchValue) {
+    fetch('https://api.openweathermap.org/data/2.5/forecast?q=' + searchValue + '&appid=c42bd53b497736aab98f794d9e907730')
     .then(function (response) {
         if (response.ok) {
             response.json().then(function (data) {
@@ -83,17 +121,3 @@ function setFutureWeather(date) {
         alert('Unable to connect to GitHub');
     });
 }
-
-function searchHistory() {
-    console.log(searches.length);
-    for (let i = 0; i < 6 && i < searches.length; i++) {
-        console.log(searches[i]);
-        var button = $('<button>').addClass('btn btn-secondary search-history-btn').text(searches[i]);
-        $('.recent-searches').append(button);
-    }
-} searchHistory();
-
-$('.search-history-btn').click(function() {
-    var value = $(this).text();
-    console.log(value);
-});
