@@ -21,7 +21,7 @@ var searches = JSON.parse(localStorage.getItem('searches')) || [];
 var searchValue;
 button.click(function() {
     searchValue = searchInput.val();
-    searches.unshift(searchValue);
+    //searches.unshift(searchValue);
 
     localStorage.setItem('searches', JSON.stringify(searches));
     $('.future-weather-display').text('');
@@ -33,14 +33,16 @@ button.click(function() {
             response.json().then(function (data) {
                 console.log(data);
                 console.log(data.city.name);
-                setCurrentWeather(data.list[0].weather[0].icon, data.city.name, data.list[0].main.temp, data.list[0].weather[0].description, data.list[0].wind.speed);
-                console.log(data.list[0].weather[0].icon);
+                setCurrentWeather(data.list[0].weather[0].icon, data.city.name, data.list[0].weather[0].description, data.list[0].main.temp, data.list[0].wind.speed, data.list[0].main.humidity);
+                console.log('temp: ' + data.list[0].main.temp);
+
+                searches.unshift(searchValue);
 
                 setFutureWeather(searchValue);         
                 searchHistory();       
             });
         } else {
-            alert('error');
+            alert('Please enter a valid city name');
         }
     })
     .catch(function (error) {
@@ -48,12 +50,13 @@ button.click(function() {
     });
 });
 
-function setCurrentWeather(descriptionIcon, cityName, temperature, weather, windSpeed) {
+function setCurrentWeather(descriptionIcon, cityName, weather, temperature, windSpeed, humidity) {
     $('#current-weather').find('img').attr('src', 'https://openweathermap.org/img/w/' + descriptionIcon + '.png');
     $('#current-weather').find('h5').eq(0).text(cityName);
-    $('#current-weather').find('p').eq(0).text((temperature - 273.15).toFixed(2) + '°C');
-    $('#current-weather').find('p').eq(1).text(weather);
+    $('#current-weather').find('p').eq(0).text(weather);
+    $('#current-weather').find('p').eq(1).text('Temperature: ' + (temperature - 273.15).toFixed(2) + '°C');
     $('#current-weather').find('p').eq(2).text('Wind Speed: ' + (windSpeed * 2.2).toFixed(2) + 'mph');
+    $('#current-weather').find('p').eq(3).text('Humidity: ' + humidity + '%')
 }
 
 function searchHistory() {
@@ -73,14 +76,14 @@ function searchHistory() {
                     response.json().then(function (data) {
                         console.log(data);
                         console.log(data.city.name);
-                        setCurrentWeather(data.list[0].weather[0].icon, data.city.name, data.list[0].main.temp, data.list[0].weather[0].description, data.list[0].wind.speed);
+                        setCurrentWeather(data.list[0].weather[0].icon, data.city.name, data.list[0].weather[0].description, data.list[0].main.temp, data.list[0].wind.speed, data.list[0].main.humidity);
                         console.log(data.list[0].weather[0].icon);
 
                         setFutureWeather(searchHistoryValue);
 
                     });
                 } else {
-                    alert('error');
+                    alert('Please enter a valid city name');
                 }
             })
             .catch(function (error) {
@@ -110,7 +113,7 @@ function setFutureWeather(searchValue) {
                     const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
                     const formattedDate = dateObj.toLocaleDateString('en-GB', options);
 
-                    var h6 = $('<h6>').addClass('card-title').text(formattedDate);
+                    var h6 = $('<h6>').addClass('card-title').css('text-align', 'center').text(formattedDate);
                     var image = $('<img>').attr('src', 'https://openweathermap.org/img/w/' + data.list[i].weather[0].icon + '.png');
                     var p1 = $('<p>').addClass('card-text').text('Temp: ' + (data.list[i].main.temp - 273.15).toFixed(1) + '°C');
                     var p3 = $('<p>').addClass('card-text').text('Humidity: ' + data.list[i].main.humidity + '%');
@@ -123,7 +126,7 @@ function setFutureWeather(searchValue) {
 
             });
         } else {
-            alert('error');
+            alert('Please enter a valid city name');
         }
     })
     .catch(function (error) {
