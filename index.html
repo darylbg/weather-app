@@ -11,6 +11,7 @@
 </head>
 <body>
     <section class="row main">
+        <div class="col-lg-1"></div>
         <div class="col-12 col-md-3 city-search">
             <div class="input-group city-search">
                 <input class="form-control border-end-0 border" type="search" value="" placeholder="search" id="example-search-input">
@@ -20,58 +21,23 @@
                     </button>
                 </span>
             </div>
-            <ul class="recent-searches">
-                <!--<button type="button" class="btn btn-secondary">Secondary</button>-->
-            </ul>
+            <ul class="recent-searches"></ul>
         </div>
         
-        <div class="col-12 col-md-9 weather-display">
+        <div class="col-12 col-md-9 col-lg-8 weather-display">
             <div class="row today-weather-display">
                 <div id="current-weather" class="card col-12">
                     <div class="card-body">
                         <h5 class="card-title" style="display: inline-block;">City</h5>
                         <h5 class="card-text" id="current-day-date" style="display: inline-block;">Date: </h5>
                         <img id="current-day-icon"></img>
-                        <p class="card-text">Temp: </p>
+                        <p class="card-text"><i class="fa-solid fa-temperature-three-quarters"></i>Temp: </p>
                         <p class="card-text">Wind: </p>
                         <p class="card-text">Humidity: </p>
                     </div>
                 </div>
             </div>
-            <div class="row future-weather-display">
-            <!--<div id="forecast" class="card col">
-                    <div class="card-body">
-                        <h6 class="card-title" id="day1-date"></h6>
-                        <p class="card-text">Temp: </p>
-                        <p class="card-text">Wind: </p>
-                        <p class="card-text">Humidity: </p>
-                    </div>
-                </div>
-                <div id="forecast" class="card col">
-                    <div class="card-body">
-                        <h6 class="card-title" id="day2-date"></h6>
-                        <p class="card-text">Temp: </p>
-                        <p class="card-text">Wind: </p>
-                        <p class="card-text">Humidity: </p>
-                    </div>
-                </div>
-                <div id="forecast" class="card col">
-                    <div class="card-body">
-                        <h6 class="card-title" id="day3-date"></h6>
-                        <p class="card-text">Temp: </p>
-                        <p class="card-text">Wind: </p>
-                        <p class="card-text">Humidity: </p>
-                    </div>
-                </div>
-                <div id="forecast" class="card col">
-                    <div class="card-body">
-                        <h6 class="card-title" id="day4-date"></h6>
-                        <p class="card-text">Temp: </p>
-                        <p class="card-text">Wind: </p>
-                        <p class="card-text">Humidity: </p>
-                    </div>
-                </div>-->
-            </div>
+            <div class="row future-weather-display"></div>
         </div>
     </section>
     <script src="https://kit.fontawesome.com/711b4030dc.js" crossorigin="anonymous"></script>

@@ -2,7 +2,7 @@ var button = $('#search-btn');
 var searchInput = $('#example-search-input');
 
 var now = dayjs();
-$('#current-day-date').text(now.format("MM-DD-YYYY"));
+$('#current-day-date').text(now.format("DD/MM/YYYY"));
 
 var day1Date = now.add(1, 'day');
 var day2Date = now.add(2, 'day');
@@ -18,13 +18,14 @@ $('#day5-date').text(day5Date.format("MM-DD-YYYY"));
 
 
 var searches = JSON.parse(localStorage.getItem('searches')) || [];
-
+var searchValue;
 button.click(function() {
-    var searchValue = searchInput.val();
+    searchValue = searchInput.val();
     searches.unshift(searchValue);
 
     localStorage.setItem('searches', JSON.stringify(searches));
     $('.future-weather-display').text('');
+    $('.recent-searches').text('');
     console.log('searchValue:', searchValue);
     fetch('https://api.openweathermap.org/data/2.5/forecast?q=' + searchValue + '&appid=c42bd53b497736aab98f794d9e907730')
     .then(function (response) {
@@ -35,8 +36,8 @@ button.click(function() {
                 setCurrentWeather(data.list[0].weather[0].icon, data.city.name, data.list[0].main.temp, data.list[0].weather[0].description, data.list[0].wind.speed);
                 console.log(data.list[0].weather[0].icon);
 
-                setFutureWeather();
-                
+                setFutureWeather(searchValue);         
+                searchHistory();       
             });
         } else {
             alert('error');
@@ -59,38 +60,40 @@ function searchHistory() {
     console.log(searches.length);
     for (let i = 0; i < 6 && i < searches.length; i++) {
         console.log(searches[i]);
-        var button = $('<button>').addClass('btn btn-secondary search-history-btn').text(searches[i]);
-        $('.recent-searches').append(button);
-    }
-} searchHistory();
+        var buttonList = $('<button>').addClass('btn btn-secondary search-history-btn').text(searches[i]);
+        $('.recent-searches').append(buttonList);
+        
+        buttonList.click(function() {
+            var searchHistoryValue = $(this).text();
+            console.log(searchHistoryValue);
+            $('.future-weather-display').text('');
+            fetch('https://api.openweathermap.org/data/2.5/forecast?q=' + searchHistoryValue + '&appid=c42bd53b497736aab98f794d9e907730')
+            .then(function (response) {
+                if (response.ok) {
+                    response.json().then(function (data) {
+                        console.log(data);
+                        console.log(data.city.name);
+                        setCurrentWeather(data.list[0].weather[0].icon, data.city.name, data.list[0].main.temp, data.list[0].weather[0].description, data.list[0].wind.speed);
+                        console.log(data.list[0].weather[0].icon);
 
-$('.search-history-btn').click(function() {
-    var searchHistoryValue = $(this).text();
-    // searches.unshift(value.val());
-    // localStorage.setItem('searches', JSON.stringify(searches));
-    $('.future-weather-display').text('');
-    fetch('https://api.openweathermap.org/data/2.5/forecast?q=' + searchHistoryValue + '&appid=c42bd53b497736aab98f794d9e907730')
-    .then(function (response) {
-        if (response.ok) {
-            response.json().then(function (data) {
-                console.log(data);
-                console.log(data.city.name);
-                setCurrentWeather(data.list[0].weather[0].icon, data.city.name, data.list[0].main.temp, data.list[0].weather[0].description, data.list[0].wind.speed);
-                console.log(data.list[0].weather[0].icon);
+                        setFutureWeather(searchHistoryValue);
 
-                setFutureWeather(searchHistoryValue);
-                
+                    });
+                } else {
+                    alert('error');
+                }
+            })
+            .catch(function (error) {
+                alert('Unable to connect to GitHub');
             });
-        } else {
-            alert('error');
-        }
-    })
-    .catch(function (error) {
-        alert('Unable to connect to GitHub');
-    });
-});
+        });
+    }
+}
+ searchHistory();
+
 
 function setFutureWeather(searchValue) {
+    console.log('this: ' + searchValue)
     fetch('https://api.openweathermap.org/data/2.5/forecast?q=' + searchValue + '&appid=c42bd53b497736aab98f794d9e907730')
     .then(function (response) {
         if (response.ok) {
@@ -101,11 +104,17 @@ function setFutureWeather(searchValue) {
                 for (let i = 7; i < data.list.length; i += 8) {
                     var div = $('<div>').addClass('card col');
                     var cardBody = $('<div>').addClass('card-body');
-                    var h6 = $('<h6>').addClass('card-title').text(data.list[i].dt_txt);
+
+                    const dateTxt = data.list[i].dt_txt; // Example date and time string
+                    const dateObj = new Date(dateTxt); // Parse the date and time string into a Date object
+                    const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+                    const formattedDate = dateObj.toLocaleDateString('en-GB', options);
+
+                    var h6 = $('<h6>').addClass('card-title').text(formattedDate);
                     var image = $('<img>').attr('src', 'https://openweathermap.org/img/w/' + data.list[i].weather[0].icon + '.png');
-                    var p1 = $('<p>').addClass('card-text').text((data.list[i].main.temp - 273.15).toFixed(2) + '°C');
-                    var p3 = $('<p>').addClass('card-text').text(data.list[i].weather[0].description);
-                    var p2 = $('<p>').addClass('card-text').text((data.list[i].wind.speed * 2.2).toFixed(2) + 'mph');
+                    var p1 = $('<p>').addClass('card-text').text('Temp: ' + (data.list[i].main.temp - 273.15).toFixed(1) + '°C');
+                    var p3 = $('<p>').addClass('card-text').text('Humidity: ' + data.list[i].main.humidity + '%');
+                    var p2 = $('<p>').addClass('card-text').text('Wind: ' + (data.list[i].wind.speed * 2.2).toFixed(1) + 'mph');
                     
                     cardBody.append(h6, image, p1, p2, p3);
                     div.append(cardBody);
